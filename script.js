@@ -1,4 +1,6 @@
 const taskInput = document.querySelector(".task-input input"),
+filters = document.querySelectorAll(".filters span"),
+clearAll = document.querySelector(".clear-btn"),
 taskBox = document.querySelector(".task-box");
 
 
@@ -7,30 +9,41 @@ let isEditedTask = false;
 // getting localstorage todo-list
 let todos = JSON.parse(localStorage.getItem("todo-list"));
 
-function showTodo(){
+filters.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        document.querySelector("span.active").classList.remove("active");
+        btn.classList.add("active");
+        showTodo(btn.id);
+    });
+})
+
+function showTodo(filter){
     let li = "";
     
     todos?.forEach((todo, id) => {
         //if todo status is completed, set the isCompleted
         let isCompleted = todo.status == "completed" ? "checked" :"";
-        li += `<li class="task">
-                    <label for="${id}">
-                        <input onclick='updateStatus(this)' type="checkbox" id="${id}">
-                        <p class="${isCompleted}">${todo.name}</p>
-                    </label>
-                    <div class="settings">
-                        <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
-                        <ul class="task-menu">
-                            <li onclick="editTask(${id},'${todo.name}')"><i class="uil uil-pen"></i>Edit</li>
-                            <li onclick='deleteTask(${id})'><i class="uil uil-trash"></i>Delete</li>
-                        </ul>
-                    </div>
-                </li>`;
+        if(filter == todo.status || filter == "all"){
+            li += `<li class="task">
+                        <label for="${id}">
+                            <input onclick='updateStatus(this)' type="checkbox" id="${id}">
+                            <p class="${isCompleted}">${todo.name}</p>
+                        </label>
+                        <div class="settings">
+                            <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
+                            <ul class="task-menu">
+                                <li onclick="editTask(${id},'${todo.name}')"><i class="uil uil-pen"></i>Edit</li>
+                                <li onclick='deleteTask(${id})'><i class="uil uil-trash"></i>Delete</li>
+                            </ul>
+                        </div>
+                    </li>`;
+        }
+        
     });
-    taskBox.innerHTML = li;
+    taskBox.innerHTML = li || `<span>You don't have any task here<span>`;
 }
 
-showTodo();
+showTodo("all");
 
 function showMenu(selectedTask){
     // getting task menu div
@@ -65,6 +78,13 @@ function deleteTask(deleteId){
     localStorage.setItem("todo-list", JSON.stringify(todos));
     showTodo();
 }
+
+clearAll.addEventListener("click", ()=>{
+    //removing all items from todos
+    todos.splice(0, todos.length);
+    localStorage.setItem("todo-list", JSON.stringify(todos));
+    showTodo();
+})
 
 function editTask(taskId, taskName){
     editId = taskId;
