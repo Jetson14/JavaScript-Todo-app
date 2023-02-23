@@ -6,3 +6,43 @@
     box-sizing: border-box;
     font-family: 'Poppins','sans-serif';
 }
+
+body{
+    overflow: hidden;
+    background-color: #3c87ff;
+}
+
+.wrapper{
+    max-width: 405px;
+    margin: 135px auto;
+    background: #fff;
+    border-radius: 7px;
+    padding: 28px 0;;
+}
+
+.task-input{
+    height: 52px;
+    padding: 0 25px;
+    position: relative;
+}
+
+.task-input img{
+    position: absolute;
+    top: 50%;
+    height: 40%;
+    transform: translate(17px, -50%);
+}
+
+.task-input input{
+    height:100%;
+    width: 100%;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #999;
+    padding: 0 20px 0 53px;
+}
+
+.task-input input::placeholder{
+    color: #bfbfbf;
+}
+
